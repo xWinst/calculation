@@ -2,7 +2,7 @@
     "name": "calculation",
     "version": "0.1.0",
     "private": true,
-    "homepage": "https://xwinst.github.io",
+    "homepage": "https://xwinst.github.io/calculation",
     "dependencies": {
         "exceljs": "^4.4.0",
         "modern-normalize": "^2.0.0",
