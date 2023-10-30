@@ -19,13 +19,13 @@ class Message {
         return Report.warning(warning, text, buttonText, styles);
     }
 
-    // error(error, text, buttonText = 'Ok') {
-    //     return Report.failure(error, text, buttonText, styles);
-    // }
+    error(error, text, buttonText = 'Ok') {
+        return Report.failure(error, text, buttonText, styles);
+    }
 
-    // success(text) {
-    //     return Notify.success(text, { position: 'center-top' });
-    // }
+    success(text) {
+        return Notify.success(text, { position: 'center-top' });
+    }
 }
 const message = new Message();
 
