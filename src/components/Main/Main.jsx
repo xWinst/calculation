@@ -571,6 +571,8 @@ const Main = () => {
             }
         }
 
+        result.calcProperties.fullCalcOnLoad = true;
+
         const buffer = await result.xlsx.writeBuffer();
 
         const blob = new Blob([buffer], {
@@ -632,7 +634,7 @@ const Main = () => {
                     text="Завантажити звіт по aптечний"
                     dis={!xlsNames.RT || !xlsNames.CT}
                 />
-                <p>Загальна кількість аптек:</p>
+                <p>Загальна кількість аптек -</p>
                 <input className={s.input} onChange={setTotal} value={pharmacyTotal} />
             </div>
             <div className={s.flexBox}>
