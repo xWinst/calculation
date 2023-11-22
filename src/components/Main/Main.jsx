@@ -50,6 +50,7 @@ const providerNames = [
     'БаДМ',
     'Оптіма',
     'Оптіма-Фарм 10 дн',
+    'Оптіма-Фарм 59 дн',
 ];
 
 const Main = () => {
@@ -145,15 +146,15 @@ const Main = () => {
                             break;
                         }
 
-                        if (headRow2 && cells[cell]?.value === 'ПРЕПАРАТ') {
+                        if (headRow2 !== undefined && cells[cell]?.value === 'ПРЕПАРАТ') {
                             isStart = true;
                             break;
                         }
                         if (isStart && cells[cell]?.value === 'ПРЕПАРАТ') isEnd = true;
 
-                        if (headRow2) {
+                        if (headRow2 !== undefined) {
                             drugs.forEach(({ name, morion }, i) => {
-                                if (cells[cell]?.value === morion) {
+                                if (cells[cell]?.value === morion && morion !== null) {
                                     discountedDrugs.push({
                                         name,
                                         count: 0,
@@ -551,17 +552,16 @@ const Main = () => {
                         break;
                     }
 
-                    if (headRow2 && cells[cell]?.value === 'ПРЕПАРАТ') {
+                    if (headRow2 !== undefined && cells[cell]?.value === 'ПРЕПАРАТ') {
                         isStart = true;
                         break;
                     }
                     if (isStart && cells[cell]?.value === 'ПРЕПАРАТ') isEnd = true;
 
-                    if (headRow2) {
+                    if (headRow2 !== undefined) {
                         drugs.forEach(({ name, morion }, i) => {
-                            if (cells[cell]?.value === morion) {
+                            if (cells[cell]?.value === morion && morion !== null) {
                                 const drug = discountedDrugs.find(drug => drug.name === name);
-
                                 cells[cell + 2].value = drug.count;
                             }
                         });
