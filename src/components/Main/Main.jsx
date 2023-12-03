@@ -396,12 +396,14 @@ const Main = () => {
 
     const loadPharmacyReport = async e => {
         const rows = await getRows(e.target.files);
+        // console.log('rows: ', rows);
         if (!rows) return;
         setXlsNames(prev => ({ ...prev, PR: e.target.files[0].name }));
 
         try {
             let drugsNamesColumn, drugsCountColumn, balanceColumn; //, pharmacyColumn;
             let headRow, reserve;
+            let isDS;
 
             for (let row = 0; row < rows.length; row++) {
                 let isEnd = false;
@@ -427,6 +429,7 @@ const Main = () => {
                         expenseTitle[i] === 'Продажи' || expenseTitle[i] === 'Розх ксть уп'
                             ? drugsCountColumn + 2
                             : drugsCountColumn + 1;
+                    isDS = expenseTitle[i] === 'Кількість Розхід';
                     break;
                 }
             }
@@ -435,24 +438,57 @@ const Main = () => {
             const discountedDrugsClone = JSON.parse(discountedDrugsJson);
 
             resetBalance(discountedDrugsClone);
-            rows.forEach(value => {
+
+            const uniquePharm = [];
+
+            const shift = rows[headRow][drugsCountColumn] === 'Розх ксть уп' ? -3 : -1;
+            // console.log('rows[headRow] = ', rows[headRow]);
+
+            // rows.forEach(value => {
+            for (let i = headRow + 1; i < rows.length; i++) {
+                const value = rows[i];
+
                 if (value[drugsNamesColumn]) {
+                    let pharmName;
+                    // console.log(
+                    //     'value[drugsNamesColumn].includes("//"): ',
+                    //     value[drugsNamesColumn].includes('//')
+                    // );
+                    if (isDS) {
+                        if (
+                            value[drugsNamesColumn].includes('//') ||
+                            value[drugsNamesColumn].includes('Аптечний')
+                        )
+                            uniquePharm.push(value[drugsNamesColumn]);
+                    } else {
+                        pharmName = value[drugsNamesColumn + shift];
+                        if (pharmName && !uniquePharm.includes(pharmName))
+                            uniquePharm.push(pharmName);
+                    }
                     const clientName = value[drugsNamesColumn].toString().toLowerCase();
                     const index = dictionary.findIndex(({ clName }) => clName === clientName);
                     if (index >= 0) {
                         let realName = dictionary[index].rName;
 
+                        // discountedDrugsClone.pharmacyTOTALCount = 0;
                         discountedDrugs.forEach(({ name, count }, i) => {
                             if (realName === name) {
                                 discountedDrugsClone[i].expense += value[drugsCountColumn] || 0;
                                 discountedDrugsClone[i].balance += value[balanceColumn] || 0;
+                                // discountedDrugsClone.pharmacyTOTALCount++;
                                 if (value[balanceColumn] > 0)
                                     discountedDrugsClone[i].pharmacyCount++;
                             }
                         });
                     }
                 }
-            });
+            }
+
+            // console.log('pharmacy TOTAL = : ', uniquePharm.length);
+            // console.log('Pharm list: ', uniquePharm);
+            setPharmacyTotal(uniquePharm.length);
+            if (rows[headRow][drugsNamesColumn] === 'Препарат') setPharmacyTotal('');
+            console.log('rows[headRow][drugsNamesColumn] : ', rows[headRow][drugsNamesColumn]);
 
             setDiscountedDrugs(discountedDrugsClone);
             setTableData(prev => ({ ...prev, reserve }));
