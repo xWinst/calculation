@@ -62,6 +62,7 @@ const Main = () => {
     const [dictionary, setDictionary] = useState();
     const [pharmacyTotal, setPharmacyTotal] = useState('');
     const [xlsNames, setXlsNames] = useState({});
+    const [pharmList, setPharmList] = useState([]);
 
     const filePicker = useRef([1, 2, 3, 4, 5].map(createRef));
 
@@ -488,6 +489,7 @@ const Main = () => {
             // console.log('Pharm list: ', uniquePharm);
             setPharmacyTotal(uniquePharm.length);
             if (rows[headRow][drugsNamesColumn] === 'Препарат') setPharmacyTotal('');
+            setPharmList(uniquePharm);
             console.log('rows[headRow][drugsNamesColumn] : ', rows[headRow][drugsNamesColumn]);
 
             setDiscountedDrugs(discountedDrugsClone);
@@ -703,6 +705,17 @@ const Main = () => {
                     }
                 />
             </div>
+
+            {pharmacyTotal && (
+                <ul className={s.list}>
+                    <li className={s.title}>Список аптек</li>
+                    {pharmList.map((pharmacy, i) => (
+                        <li className={s.item}>
+                            {i + 1} - {pharmacy}
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 };

@@ -32,3 +32,21 @@
 .mt {
     margin-top: 100px;
 }
+
+.list {
+    margin-top: 70px;
+    width: 800px;
+    height: 300px;
+    overflow-y: scroll;
+}
+
+.title {
+    background-color: var(--btn-color);
+    color: var(--main-color);
+    padding: 10px 30px;
+    font-size: 20px;
+}
+
+.item {
+    padding: 5px 10px;
+}
